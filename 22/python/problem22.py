@@ -17,7 +17,7 @@ Directions = DirectionsT(Position(-1, 0), Position(1, 0),
 
 
 StateT = namedtuple('StateT', ['Clean', 'Weakened', 'Infected', 'Flagged'])
-State = StateT(0, 1, 3, 4)
+State = StateT(0, 1, 2, 3)
 
 
 LOGGING = False
@@ -53,9 +53,15 @@ class Sporifica:
     
     def turn(self, state):
         if state == State.Clean:
+            log('Turning left')
             self.turn_left()
         elif state == State.Infected:
+            log('Turning right')
             self.turn_right()
+        elif state == State.Flagged:
+            log('Reversing')
+            self.direction = Position(self.direction.row * -1, self.direction.col * -1)
+
 
     def move(self):
         """Move"""
@@ -99,6 +105,18 @@ class Cluster:
         self.virus.move()
 
 
+class EvolvedCluster(Cluster):
+    def __init__(self, memory_string):
+        super(EvolvedCluster, self).__init__(memory_string)
+
+    def next_state(self, pos):
+        """Changes state of position."""           
+        self.infected[pos] = (self.infected[pos] + 1) % 4
+        log('evovled', pos, 'to', self.infected[pos]) 
+        if self.infected[pos] == State.Infected:
+            self.infections_caused += 1
+
+
 def solve_a(bursts, memory_string):
     """Solve first part of puzzle."""
     cluster = Cluster(memory_string)
@@ -107,6 +125,13 @@ def solve_a(bursts, memory_string):
        cluster.burst()
     return cluster.infections_caused
 
+def solve_b(bursts, memory_string):
+    """Solve first part of puzzle."""
+    cluster = EvolvedCluster(memory_string)
+    log(cluster.infected)
+    for _ in tqdm.tqdm(range(bursts)):
+       cluster.burst()
+    return cluster.infections_caused
 
 def main():
     """Main program."""
@@ -114,7 +139,9 @@ def main():
     memory_string = sys.stdin.read()
     solution_a = solve_a(10000, memory_string)
     print('The solution to Part A is', solution_a)
-    pyperclip.copy(str(solution_a))
+    solution_b = solve_b(10000000, memory_string)
+    print('The solution to Part B is', solution_b)
+    pyperclip.copy(str(solution_b))
 
 
 if __name__ == '__main__':
