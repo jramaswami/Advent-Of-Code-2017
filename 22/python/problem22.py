@@ -9,7 +9,8 @@ import pyperclip
 
 Position = namedtuple('Position', ['row', 'col'])
 Position.__add__ = lambda s, o: Position(s.row + o.row, s.col + o.col)
-Position.__sub__ = lambda s, o: Position(s.row - o.row, s.col - o.col)
+Position.move = lambda s, cmplx: Position(s.row + cmplx.imag, s.col + cmplx.real)
+
 
 DirectionsT = namedtuple('Directions', ['up', 'down', 'right', 'left'])
 Directions = DirectionsT(Position(-1, 0), Position(1, 0), 
@@ -18,15 +19,6 @@ Directions = DirectionsT(Position(-1, 0), Position(1, 0),
 
 StateT = namedtuple('StateT', ['Clean', 'Weakened', 'Infected', 'Flagged'])
 State = StateT(0, 1, 2, 3)
-
-
-LOGGING = False
-
-
-def log(*msg):
-    """Logging"""
-    if LOGGING:
-        print(*msg)
 
 
 class Sporifica:
@@ -53,13 +45,10 @@ class Sporifica:
     
     def turn(self, state):
         if state == State.Clean:
-            log('Turning left')
             self.turn_left()
         elif state == State.Infected:
-            log('Turning right')
             self.turn_right()
         elif state == State.Flagged:
-            log('Reversing')
             self.direction = Position(self.direction.row * -1, self.direction.col * -1)
 
 
@@ -93,13 +82,11 @@ class Cluster:
             self.infected[pos] = State.Clean
         else:
             self.infected[pos] = State.Infected
-        log(pos, 'to', self.infected[pos]) 
         if self.infected[pos] == State.Infected:
             self.infections_caused += 1
 
     def burst(self):
         """Perform one burst."""
-        log('virus pos', self.virus.pos, self.infected[self.virus.pos])
         self.virus.turn(self.infected[self.virus.pos])
         self.next_state(self.virus.pos)
         self.virus.move()
@@ -112,7 +99,6 @@ class EvolvedCluster(Cluster):
     def next_state(self, pos):
         """Changes state of position."""           
         self.infected[pos] = (self.infected[pos] + 1) % 4
-        log('evovled', pos, 'to', self.infected[pos]) 
         if self.infected[pos] == State.Infected:
             self.infections_caused += 1
 
@@ -120,26 +106,91 @@ class EvolvedCluster(Cluster):
 def solve_a(bursts, memory_string):
     """Solve first part of puzzle."""
     cluster = Cluster(memory_string)
-    log(cluster.infected)
     for _ in tqdm.tqdm(range(bursts)):
        cluster.burst()
     return cluster.infections_caused
 
+
 def solve_b(bursts, memory_string):
     """Solve first part of puzzle."""
     cluster = EvolvedCluster(memory_string)
-    log(cluster.infected)
     for _ in tqdm.tqdm(range(bursts)):
        cluster.burst()
     return cluster.infections_caused
+
+
+def solve_a0(bursts, memory_string):
+    """Alternate solution for a."""
+    infection_count = 0
+    rot_left = 1j
+    rot_right = -1j
+    lines = memory_string.strip().split('\n')
+    center = len(lines) // 2
+    grid = defaultdict(int)
+    for row, line in enumerate(lines):
+        for col, char in enumerate(line):
+            if char == '#':
+                posn = col - (row * 1j)
+                grid[posn] = 1
+    virus_posn = center - (center * 1j)
+    virus_dirn = 1j
+    for _ in range(bursts):
+        # turn
+        curr_state = grid[virus_posn]
+        if curr_state == 0: # clean
+            virus_dirn *= rot_left
+            infection_count += 1  # will be infected
+        elif curr_state == 1: # infected
+            virus_dirn *= rot_right
+        # infect
+        new_state = (curr_state + 1) % 2
+        grid[virus_posn] = new_state
+        # move
+        virus_posn += virus_dirn
+    return infection_count
+
+
+def solve_b0(bursts, memory_string):
+    """Alternate solution for b."""
+    infection_count = 0
+    rot_left = 1j
+    rot_right = -1j
+    lines = memory_string.strip().split('\n')
+    center = len(lines) // 2
+    grid = defaultdict(int)
+    for row, line in enumerate(lines):
+        for col, char in enumerate(line):
+            if char == '#':
+                posn = col - (row * 1j)
+                grid[posn] = 2
+    virus_posn = center - (center * 1j)
+    virus_dirn = 1j
+    for _ in tqdm.tqdm(range(bursts)):
+        # turn
+        curr_state = grid[virus_posn]
+        if curr_state == 0: # clean
+            virus_dirn *= rot_left
+        elif curr_state == 1: # weakened
+            infection_count += 1 # will be infected
+        elif curr_state == 2: # infected
+            virus_dirn *= rot_right
+        elif curr_state == 3: # flagged
+            virus_dirn *= -1
+        # infect
+        new_state = (curr_state + 1) % 4
+        grid[virus_posn] = new_state
+        # move
+        virus_posn += virus_dirn
+    return infection_count
+
 
 def main():
     """Main program."""
     import sys
     memory_string = sys.stdin.read()
-    solution_a = solve_a(10000, memory_string)
+    solution_a = solve_a0(10000, memory_string)
     print('The solution to Part A is', solution_a)
-    solution_b = solve_b(10000000, memory_string)
+    solution_b = solve_b0(10000000, memory_string)
     print('The solution to Part B is', solution_b)
     pyperclip.copy(str(solution_b))
 
