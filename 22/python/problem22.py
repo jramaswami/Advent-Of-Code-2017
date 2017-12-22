@@ -55,7 +55,7 @@ class Sporifica:
         if state == State.Clean:
             self.turn_left()
         elif state == State.Infected:
-            self.turn_right
+            self.turn_right()
 
     def move(self):
         """Move"""
@@ -94,12 +94,7 @@ class Cluster:
     def burst(self):
         """Perform one burst."""
         log('virus pos', self.virus.pos, self.infected[self.virus.pos])
-        if self.infected[self.virus.pos] == State.Infected:
-            log(self.virus.pos, 'turning right')
-            self.virus.turn_right()
-        else:
-            log(self.virus.pos, 'turning left')
-            self.virus.turn_left()
+        self.virus.turn(self.infected[self.virus.pos])
         self.next_state(self.virus.pos)
         self.virus.move()
 
