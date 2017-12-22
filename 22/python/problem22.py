@@ -11,19 +11,14 @@ Position = namedtuple('Position', ['row', 'col'])
 Position.__add__ = lambda s, o: Position(s.row + o.row, s.col + o.col)
 Position.__sub__ = lambda s, o: Position(s.row - o.row, s.col - o.col)
 
-Directions = namedtuple('Directions', ['up', 'down', 'right', 'left'])
-DIRECTIONS = Directions(Position(-1, 0), 
-                        Position(1, 0), 
-                        Position(0, 1), 
-                        Position(0, -1))
-LEFT_TURN = {DIRECTIONS.up: DIRECTIONS.left, 
-             DIRECTIONS.left: DIRECTIONS.down,
-             DIRECTIONS.down: DIRECTIONS.right, 
-             DIRECTIONS.right: DIRECTIONS.up}
-RIGHT_TURN = {DIRECTIONS.up: DIRECTIONS.right, 
-              DIRECTIONS.left: DIRECTIONS.up,
-              DIRECTIONS.down: DIRECTIONS.left, 
-              DIRECTIONS.right: DIRECTIONS.down}             
+DirectionsT = namedtuple('Directions', ['up', 'down', 'right', 'left'])
+Directions = DirectionsT(Position(-1, 0), Position(1, 0), 
+                        Position(0, 1), Position(0, -1))
+
+
+StateT = namedtuple('StateT', ['Clean', 'Weakened', 'Infected', 'Flagged'])
+State = StateT(0, 1, 3, 4)
+
 
 LOGGING = False
 
@@ -38,16 +33,30 @@ class Sporifica:
     """Represents the virus."""
     def __init__(self, init_pos):
         self.pos = init_pos
-        self.direction = DIRECTIONS.up
+        self.direction = Directions.up
 
     def turn_right(self):
         """Turn"""
-        self.direction = RIGHT_TURN[self.direction]
+        turns = {Directions.up: Directions.right, 
+                 Directions.left: Directions.up,
+                 Directions.down: Directions.left, 
+                 Directions.right: Directions.down}  
+        self.direction = turns[self.direction]
     
     def turn_left(self):
         """Turn"""
-        self.direction = LEFT_TURN[self.direction]
+        turns = {Directions.up: Directions.left, 
+                 Directions.left: Directions.down,
+                 Directions.down: Directions.right, 
+                 Directions.right: Directions.up}
+        self.direction = turns[self.direction]
     
+    def turn(self, state):
+        if state == State.Clean:
+            self.turn_left()
+        elif state == State.Infected:
+            self.turn_right
+
     def move(self):
         """Move"""
         self.pos = self.pos + self.direction
@@ -56,7 +65,7 @@ class Sporifica:
 class Cluster:
     """Represents cluster."""
     def __init__(self, memory_string):
-        self.infected = defaultdict(bool)
+        self.infected = defaultdict(int)
         self.infections_caused = 0
         self.init_memory_dim = 0
         self.read_memory(memory_string)
@@ -70,25 +79,28 @@ class Cluster:
             for cindex, col in enumerate(row):
                 if col == '#':
                     pos = Position(rindex, cindex)
-                    self.infected[pos] = True
+                    self.infected[pos] = State.Infected
 
-    def toggle(self, pos):
-        """Toggles the infection status of pos."""           
-        self.infected[pos] = not self.infected[pos]
+    def next_state(self, pos):
+        """Changes state of position."""           
+        if self.infected[pos] == State.Infected:
+            self.infected[pos] = State.Clean
+        else:
+            self.infected[pos] = State.Infected
         log(pos, 'to', self.infected[pos]) 
-        if self.infected[pos]:
+        if self.infected[pos] == State.Infected:
             self.infections_caused += 1
 
     def burst(self):
         """Perform one burst."""
-        log('virus pos', self.virus.pos)
-        if self.infected[self.virus.pos]:
+        log('virus pos', self.virus.pos, self.infected[self.virus.pos])
+        if self.infected[self.virus.pos] == State.Infected:
             log(self.virus.pos, 'turning right')
             self.virus.turn_right()
         else:
             log(self.virus.pos, 'turning left')
             self.virus.turn_left()
-        self.toggle(self.virus.pos)
+        self.next_state(self.virus.pos)
         self.virus.move()
 
 
