@@ -177,14 +177,13 @@ def main():
     import sys
     import pyperclip
     program = sys.stdin.read().strip()
-    # machine = Machine()
-    # machine.load_program(program)
-    # machine.run()
-    # print('The solution to part A is', machine.instruction_ctr['mul'])
+    machine = Machine()
+    machine.load_program(program)
+    machine.run()
+    print('The solution to part A is', machine.instruction_ctr['mul'])
     solution_b = solve_b()
     print('The solution to part B is', solution_b)
     pyperclip.copy(str(solution_b))
-
 
 
 if __name__ == '__main__':
