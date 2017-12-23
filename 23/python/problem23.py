@@ -140,17 +140,35 @@ class Machine:
         self.instruction_ptr += 1 
 
 
+def is_prime(b):
+    """Returns 1 if not prime."""
+    lim = int(sqrt(b)) + 1
+    for d in range(2, b):
+        if b % d:
+            return 0
+    return 1
+
 def solve_b():
+    b = 99 # 1: set b 99
+    c = b # 2: set c b
+    b = b * 100 # 5: mul b 100
+    b = b + 100000 # 6: sub b -100000
+    c = b # 7: set c b
+    c = c + 17000 # 8: sub c -17000
     h = 0
-    for b in range(109900, 126901, 17):
-        lim = int(sqrt(b)) + 1
-        for d in range(2, lim):
-            if b % d:
-                print(b, 'is not prime', b // d)
-                h += 1
+    while True:
+        f = 1 # 9: set f 1
+        for d in range(2, b):
+            if b % d == 0:
+                f = 0
                 break
-        else:
-            print(b, 'is prime!')
+        if f == 0:  # 25: jnz f 2
+            h = h + 1  # 26: sub h -1
+        g = b  # 27: set g b 
+        g = g - c  # 28: sub g c
+        if g == 0:  # 29: jnz g 2
+            break # 30: jnz 1 3
+        b = b + 17 # 31: sub b -17
     return h
 
 
