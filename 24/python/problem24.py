@@ -23,7 +23,6 @@ class Edge:
         return "({} {})".format(self.node_u, self.node_v)
 
 
-
 def dfs_a(graph, node_u, score):
     """DFS search for maximum bridge."""
     max_score = score
@@ -47,6 +46,22 @@ def dfs_b(graph, node_u, score_t):
     return max_score_t
 
 
+def dfs(graph, node_u, score_a, score_b):
+    """DFS search to solve both parts of puzzle."""
+    max_score_a = score_a
+    max_score_b = score_b
+    for edge in (e for e in graph[node_u] if not e.visited):
+        node_v = edge.other_side(node_u)
+        edge.visited = True
+        my_score_a = score_a + edge.score
+        my_score_b = (score_b[0] + 1, score_b[1] + edge.score)
+        new_score_a, new_score_b = dfs(graph, node_v, my_score_a, my_score_b)
+        max_score_a = max(new_score_a, max_score_a)
+        max_score_b = max(new_score_b, max_score_b)
+        edge.visited = False
+    return (max_score_a, max_score_b)
+
+
 def parse_input(input_string):
     """Parse the given input."""
     graph = defaultdict(list)
@@ -61,13 +76,11 @@ def parse_input(input_string):
 def main():
     """Main program."""
     import sys
-    import pyperclip
     input_string = sys.stdin.read()
     graph = parse_input(input_string)
-    solution_a = dfs_a(graph, 0, 0)
+    solution_a, solution_b = dfs(graph, 0, 0, (0, 0))
     print('The solution to part A is', solution_a)
-    solution_b = dfs_b(graph, 0, (0, 0))[1]
-    print('The solution to part B is', solution_b)
+    print('The solution to part B is', solution_b[1])
 
 
 if __name__ == '__main__':
