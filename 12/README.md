@@ -10,7 +10,7 @@ aren't connected to each other directly. Instead, programs pass messages
 between each other until the message reaches the intended recipient.
 
 For some reason, though, some of these messages aren't ever reaching their
-intended recipient, and the programs suspect that some pipes are missing. They
+intended recipient, and the programs suspect that some _pipes_ are missing. They
 would like you to investigate.
 
 You walk through the village and record the ID of each program and the IDs with

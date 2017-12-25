@@ -8,7 +8,7 @@ Fortunately for her, you have plenty of experience with infinite grids.
 
 Unfortunately for you, it's a [hex grid][1].
 
-The hexagons ("hexes") in this grid are aligned such that adjacent hexes can be
+The hexagons ("hexes") in _this grid_ are aligned such that adjacent hexes can be
 found to the north, northeast, southeast, south, southwest, and northwest:
 
 ```

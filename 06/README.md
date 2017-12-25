@@ -3,7 +3,7 @@
 A debugger program here is having an issue: it is trying to repair a memory
 reallocation routine, but it keeps getting stuck in an infinite loop.
 
-In this area, there are sixteen memory banks; each memory bank can hold any
+In this area, there are _sixteen memory banks_; each memory bank can hold any
 number of **blocks**. The goal of the reallocation routine is to balance the
 blocks between the memory banks.
 

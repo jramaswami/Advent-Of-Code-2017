@@ -47,7 +47,7 @@ Your puzzle answer was `1940`.
 
 ## --- Part Two ---
 
-The bridge you've built isn't long enough; you can't jump the rest of the way.
+The bridge you've built isn't long enough; you can't _jump the rest of the way_.
 
 In the example above, there are two longest bridges:
 

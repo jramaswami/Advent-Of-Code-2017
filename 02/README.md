@@ -40,7 +40,7 @@ for your effort." However, the program seems a little worried. Can programs
 "Based on what we're seeing, it looks like all the User wanted is some
 information about the *evenly divisible values* in the spreadsheet.
 Unfortunately, none of us are equipped for that kind of calculation - most of
-us specialize in bitwise operations."
+us specialize in _bitwise operations_."
 
 It sounds like the goal is to find the only two numbers in each row where one
 evenly divides the other - that is, where the result of the division operation

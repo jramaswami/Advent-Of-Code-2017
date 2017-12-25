@@ -33,7 +33,7 @@ Your puzzle answer was `8222`.
 
 ## --- Part Two ---
 
-Now, all the defragmenter needs to know is the number of **regions**. A region is a group of **used** squares that are all **adjacent**, not including diagonals. Every used square is in exactly one region: lone used squares form their own isolated regions, while several adjacent squares all count as a single region.
+Now, _all the defragmenter needs to know_ is the number of **regions**. A region is a group of **used** squares that are all **adjacent**, not including diagonals. Every used square is in exactly one region: lone used squares form their own isolated regions, while several adjacent squares all count as a single region.
 
 In the example above, the following nine regions are visible, each marked with a distinct digit:
 

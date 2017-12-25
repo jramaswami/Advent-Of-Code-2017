@@ -6,7 +6,7 @@ It seems like the assembly is meant to operate on a set of **registers** that ar
 
 There aren't that many instructions, so it shouldn't be hard to figure out what they do. Here's what you determine:
 
-* `snd X` **plays a sound** with a frequency equal to the value of `X`.
+* `snd X` **_plays a sound_** with a frequency equal to the value of `X`.
 * `set X Y` **sets** register `X` to the value of `Y`.
 * `add X Y` **increases** register `X` by the value of `Y`.
 * `mul X Y` sets register `X` to the result of **multiplying** the value contained in register `X` by the value of `Y`.

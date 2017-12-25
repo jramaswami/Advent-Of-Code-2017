@@ -3,7 +3,7 @@
 You come across some programs that are trying to implement a software emulation
 of a hash based on knot-tying. The hash these programs are implementing isn't
 very strong, but you decide to help them anyway. You make a mental note to
-remind the Elves later not to invent their own cryptographic functions.
+remind the Elves later not to _invent their own cryptographic functions_.
 
 This hash function simulates tying a knot in a circle of string with 256 marks
 on it. Based on the input to be hashed, the function repeatedly selects a span

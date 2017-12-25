@@ -205,7 +205,7 @@ Your puzzle answer was `1900`.
 Now, you need to pass through the firewall without being caught - easier said
 than done.
 
-You can't control the speed of the packet, but you can **delay** it any number
+You can't control the _speed of the packet_, but you can **delay** it any number
 of picoseconds. For each picosecond you delay the packet before beginning your
 trip, all security scanners move one step. You're not in the firewall during
 this time; you don't enter layer `0` until you stop delaying the packet.

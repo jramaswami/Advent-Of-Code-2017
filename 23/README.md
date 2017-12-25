@@ -21,7 +21,7 @@ Your puzzle answer was `9409`.
 
 Now, it's time to fix the problem.
 
-The **debug mode switch** is wired directly to register a. You flip the switch, which makes **register `a` now start at 1** when the program is executed.
+The **debug mode switch** is wired directly to register a. You _flip the switch_, which makes **register `a` now start at 1** when the program is executed.
 
 Immediately, the coprocessor begins to overheat. Whoever wrote this program obviously didn't choose a very efficient implementation. You'll need to **optimize the program** if it has any hope of completing before Santa needs that printer working.
 

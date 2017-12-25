@@ -1,7 +1,7 @@
 # --- Day 17: Spinlock ---
 
 Suddenly, whirling in the distance, you notice what looks like a massive,
-pixelated hurricane: a deadly [spinlock][1]. This spinlock isn't just consuming
+_pixelated hurricane_: a deadly [spinlock][1]. This spinlock isn't just consuming
 computing power, but memory, too; vast, digital mountains are being ripped from
 the ground and consumed by the vortex.
 

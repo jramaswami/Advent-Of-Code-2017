@@ -2,7 +2,7 @@
 
 You come upon a very unusual sight; a group of programs here appear to be [dancing][1].
 
-There are sixteen programs in total, named `a` through `p`. They start by standing in a line: `a` stands in position `0`, `b` stands in position `1`, and so on until `p`, which stands in position 15.
+There are sixteen programs in total, named `a` through `p`. They start by standing in a _line_: `a` stands in position `0`, `b` stands in position `1`, and so on until `p`, which stands in position 15.
 
 The programs' **dance** consists of a sequence of **dance moves**:
 
