@@ -71,11 +71,31 @@ def solve_b(steps, limit):
         curr += 1
     return value
 
+def solve_b0(steps, limit):
+    "Better solution to second part of puzzle."""
+    index = 0
+    curr = 1
+    value = 0
+    while curr <= limit:
+        jump = (curr - index - 1) // steps
+        if jump:
+            index = index + (jump * steps) + jump 
+            curr += jump
+        else:
+            actual_steps = steps % curr
+            index = (index + actual_steps) % curr
+            if index == 0:
+                value = curr
+            curr += 1
+            index += 1
+        assert index < curr
+    return value
+
 
 def main():
     """Main program."""
     print('The solution to part A is', solve_a(INPUT))
-    print('The solution to part B is', solve_b(INPUT, LIMIT))
+    print('The solution to part B is', solve_b0(INPUT, LIMIT))
 
 
 if __name__ == '__main__':
